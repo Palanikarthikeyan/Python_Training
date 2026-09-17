@@ -1,0 +1,16 @@
+fobj = open(r'C:\\Users\karth\emp.csv','r')
+s = fobj.read() ## <===
+fobj.close()
+print("File contents:-")
+print("-------------------")
+print(s)
+print("\n\n")
+fobj = open(r'C:\\Users\karth\emp.csv','r')
+L = fobj.readlines() ## <===
+fobj.close()
+print("File contents:-")
+print("-------------------")
+print(L)
+print("\n")
+print("Recent log or Last 3 line data")
+print(L[-3:])
