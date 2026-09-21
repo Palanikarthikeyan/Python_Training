@@ -1,0 +1,521 @@
+-------------------------------------------------------------------------
+ DAY6/
+  |
+  |->Karthik/
+	  |--->  app.py (or) main.py
+	  |--->  test_app.py (or) test_main.py
+	  |
+	  |--->   __init__.py  <== 
+		  from app import *
+		  from Dir.SubDir.crm import customer,display * 
+		 -
+
+	  |--> requirement.txt 
+		 - list out python modules
+		 
+ 	  |--> project word doc
+		 |-> project description
+		 |-> functional flow diagram
+          |-->files/
+		  - emp.csv
+		  - AML.csv
+		  - config.txt
+		  - repo.log
+		  ...
+  |----------------------------------------------------------
+
+pytest 
+pip show pytest
+
+E:\> pip install pytest
+E:\> pip install flask
+                 ========
+		  this package/module - global space - available in my laptop/system anywhere
+
+E:\> pip show pytest
+pytest 8.0.1 
+...
+...
+-----------------------
+E:\> pip install pytest == 9.0.1
+
+
+
+ImportError 
+
+
+
+projectA --> flask 2.3
+projectB ---> flask 3.1
+
+pip install flask // global
+
+
+projectA --> flask 2.3
+
+projectA/
+    |_________venv 
+                |____flask 2.3
+	     pip install flask == 2.3
+
+projectB ---> flask 3.1
+    |__________venv
+	          |______flask 3.1 
+	     pip install flask == 3.1
+		
+--------------------------------------------------------------------
+pytest
+test usecase => 
+
+1. filename
+=============
+file name starts with test_<name>.py
+		      ====
+
+all the function name - starts with test_<name>
+
+2. functionName
+=================
+ex:  
+def  test_sqrt():
+	...
+
+3. assert - keyword 
+
+ex:
+----
+	num = 7
+	assert 7 * 7 = 49 
+	Vs
+	assert 7 * 7 = 40 
+--------------------------------------------------------------
+
+@pytest.mark.<markerName>
+
+
+pytest -m <markerName> -v <== To run and test
+-----------------------------------------------
+import pytest
+
+@pytest.mark.great
+def test_greater():
+	n = 100
+	assert n > 100
+
+@pytest.mark.great
+def test_greater_equal():
+	n = 100
+	assert n >= 100
+
+@pytest.mark.others
+def test_less():
+	n = 100
+	assert n < 100
+------------------------------------------
+
+python -m others -v 
+
+python -m great -v 
+
+
+--------------------------------------------
+Fixures 
+--------
+customer = { "id": 101,"name":"Raj","balance":1000}
+---------
+test-1 - verify customer id
+test-2 - verify customer name
+test-3 - verify customer balance
+...
+...
+----//multiple tests need the same customer data
+
+
+			fixture
+		+-----------------------+
+		|	Customer Data   |
+		+-----------------------+
+			|	|
+			|	|
+		   Test-1	Test-2
+===========================================================================================================
+Regular Expression - Regx
+---------------------------
+ |-> 1. Search pattern 
+ |-> 2. Substitute 
+     +
+ |-> 3. split 
+
+
+import re
+
+re.search() - search the pattern  => re.search("pattern_string","input_string",re.I) -> <obj>/None 
+re.findall() - search the pattern => re.findall("pattern_string","input_string",re.I) -> [results] / []
+
+[] <== character class
+---//1 char
+
+[Aa]run
+--------->  Arun
+--------------------> arun
+
+re.search("[Aa]run","Arun") ->True
+re.search("[Aa]run","arun") ->True
+
+re.search("[Aa]run","ARUN") ->NOT-Match 
+
+[Aa][Rr]un
+--------------->   ARun Arun aRun arun //OK
+
+[a-z] ->any lowercase chars
+[A-Z] ->any uppercase chars
+
+[a-zA-Z] ->any alpha 
+
+re.search("[A-Z][a-zA-Z][a-zA-Z]","....")
+	   ----- ==============
+	     |   
+	     Fax
+	     FAX
+	     FaX
+             -------//True
+
+	     fAX
+	     fax
+	    --------//Not-Matched
+
+
+[0-9] - any digits  (or) \d
+
+[a-zA-Z0-9] - alpha number  (or) \w
+
+
+n = input("Enter any two values:")
+--
+[0-9][0-9] 
+-----------
+\d\d
+-----------
+[0-9]{2}
+----------
+\d{2}
+--------
+n = int(n) + 100
+----------------------------------
+
+^  => ^pattern - find a pattern line starts with ........
+
+
+^sales ===>  sales asdfsfsfasfsdad //OK
+
+^sales =====>  asfasdfsfds sales asfasd //Not-Matched  
+
+
+re.search("^sales","raj,sales,pune") ->None
+
+Vs
+re.search("sales","raj,sales,pune") ->True
+
+Vs
+
+re.search("^sales","sales,safssdfsdfsd") ->True
+
+$ ==> pattern$  - find a pattern line ends with ...
+---------------
+
+re.search("sales$","asfssfsfsfsa sales") ->OK
+
+re.search("sales$","sales,raj") ->Not-Matched
+re.search("sales$","raj,sales,pune") ->Not-Matched
+
+>>> CSV_files = []
+>>>
+>>> for var in os.listdir("."):
+...     if(re.search("csv$",var)):
+...         CSV_files.append(var)
+...
+>>> len(CSV_files)
+28
+>>>
+>>> len([var for var in os.listdir(".") if re.search("csv$",var)])
+28
+>>> L = [var for var in os.listdir(".") if re.search("csv$",var)]
+>>>
+>>> d={}
+>>>
+>>> d['CSV'] = [var for var in os.listdir(".") if re.search("csv$",var)]
+>>>
+>>> d['PDF'] = [var for var in os.listdir(".") if re.search("pdf$",var)]
+>>>
+>>> len(d['PDF'])
+3
+>>> d['PDF']
+['attention.pdf', 'Img-Activitypage.pdf', 'nmcli_examples.pdf']
+>>>
+
+^pattern
+pattern$
+
+^pattern$ -- pattern only
+
+. ->match any single char
+.* --> list of all
+re.search("^a.*daemon.*bin.*sh$",input_data)
+           |__________________|
+		|
+The line starts with char 'a' followed by list of anyText anywhere the substring
+called 'daemon' again search any text anysubstring 'bin' again search everything
+line ends with 'sh' string
+
+| => like logical OR - any one pattern is matched
+
+re.search("sales|prod|QA","raj,sales,pune") ->OK
+
+() => group -> like logical AND -> both pattern should match 
+				
+re.search("(sales|prod)(pune|mumbai)","salespune")    # OK
+re.search("(sales|prod)(pune|mumbai)","salesmumbai")  # OK
+re.search("(sales|prod)(pune|mumbai)","saleschennai")  # Not-Matched
+
+{}
+
+ + <== 1 or more 
+
+a+  <== a  aaaaaaaaaaaaaaaaa //OK
+
+ab+ <== ab  abbbbbbbbbbbbbbbb//OK
+
+		abbbbbbbbbb,bbbbbbbb//Not-MAtched
+
+\d+ <== 1 or more digits
+---
+===============================================================================
+re.sub()
+---------
+re.sub('oldString','replaceString','inputString') ->output_String
+						    ==============						|-> replaceString if oldpattern is matched
+			|-> inputString if oldpattern is Not-Matched
+
+>>> s='101,raj,sales,pune,1000'
+>>>
+>>> re.sub('sales','admin',s)
+'101,raj,admin,pune,1000'
+>>>
+>>> re.sub('QA','admin',s)
+'101,raj,sales,pune,1000'
+>>>
+>>> re.sub('sales','',s)
+'101,raj,,pune,1000'
+>>>
+>>> re.sub('sales,','',s)
+'101,raj,pune,1000'
+>>>
+>>>
+>>> s=re.sub('sales,','',s)
+>>> s
+'101,raj,pune,1000'
+>>>
+
+cost="1000Rs"
+---------------//Given string ->calculate 18% of cost
+
+
+>>> cost="1000Rs"
+>>> re.findall("[a-zA-Z]+",cost)
+['Rs']
+>>>
+>>> re.sub("[a-zA-Z]+","",cost)
+'1000'
+>>>
+>>> cost="1000INR"
+>>> re.sub("[a-zA-Z]+","",cost)
+'1000'
+>>>
+>>> cost="Rs1000"
+>>> re.sub("[a-zA-Z]+","",cost)
+'1000'
+>>> cost="1000Euro"
+>>> re.sub("[a-zA-Z]+","",cost)
+'1000'
+>>> cost="1000RM"
+>>> re.sub("[a-zA-Z]+","",cost)
+'1000'
+>>> cost = re.sub("[a-zA-Z]+","",cost)
+>>> cost
+'1000'
+>>>
+>>> float(cost)
+1000.0
+>>> int(cost)
+1000
+>>> int(cost) * 0.18
+180.0
+>>>
+-------------------------------------------------------------
+File,Process
+
+File = Data => Under the Storage unit	
+Process = Data =>Under the CPU
+--------
+   |-> data + address
+
+Thread - data - flow of execution - common address
+
+P1 = data + address
+|
+T1 = data1 
+T2 = data1
+T3 = data1
+    ---------//common address
+
+import time
+
+GIL
+----
+10
+11
+12
+
+t1 -> calculate n + 10
+t2 -> calculate n + 10
+
+import threading
+
+threading.Thread()
+	   |	---//object creation
+	 className
+
+threading.Thread(target=<threadName>,args=(tuple)) ->object
+
+
+t1 = threading.Thread(target=task1,args=("Task-1"))
+t2 = threading.Thread(target=task2,args=("Task-2"))
+t3 = threading.Thread(target=task3,args=("Task-3"))
+
+t1.start()
+t2.start()
+t3.start()
+
+t1.join()
+t2.join()
+t3.join()
+print("all the task is done")
+
+
+from concurrent.futures import ThreadPoolExecutor
+
+def f1(file):
+	return f'file:{file} download'
+
+files =['f1.csv','f2.csv','f3.csv']
+
+with ThreadPoolExecutor(max_workers=4) as executor:
+	results = executor.map(f1,files)
+	
+for var in results:
+	print(var)
+
+---------------------------------
+threading
+multiprocessing - cpu core
+Asyncio
+shared
+----------------------------------------------------
+import requests
+
+requests.get(URL) -> status_code
+			|-----------> 200 OK
+			|--> != 200 ->Failed
+
+Client ----->--------Request---------------->Server-------->ServerScripts
+								|
+	--------<------------------------------------------------
+			Response 
+	  1. Data Response - JSON - Content-Type:application/JSON
+	  2. Page Response - <html>...{{template}}</html> - Content-Type: text/html
+
+ ProductID:______
+	|
+ ProductName
+ Cost
+ features 
+ -----------------//information(data)
+
+
+Webpage response
+--------------------
+<html>
+<head>
+<title>...</title>
+<body>
+<p>
+<h1>product name:{{pname}}</h1>
+...
+<h3>feature{{features}}</h3>
+..
+</p>
+</body>
+</html>
+----------------------Vs
+Data response
+-----------------
+{'pid':101,'pname':'Switch','pcost':2332432} //Data
+
+import requests
+r = requests.get(URL)
+if(r.status_code != 200):
+	exit()
+
+r.headers -> dict
+	  --------
+	  ->web header information
+
+r.headers['Content-Type'] 
+
+web_page = r.text
+
+  <or>
+python_data = r.json()
+
+
+###############################################################
+
+numpy
+  |--> array index 
+  |--> ufunctions
+	  |->mathmetical function
+
+
+>>> import numpy as np
+>>>
+>>> L=[10,20,30,40,50]
+>>>
+>>> total = 0
+>>> for var in L:
+...     total = total+ var
+...
+>>> total
+150
+>>>
+>>> arr = np.array(L)
+>>>
+>>> print(np.sum(arr))
+150
+>>> print(np.max(arr))
+50
+>>> print(np.min(arr))
+10
+>>> print(np.mean(arr))
+30.0
+>>> arr + 10.45
+array([20.45, 30.45, 40.45, 50.45, 60.45])
+>>> arr / 2.3
+array([ 4.34782609,  8.69565217, 13.04347826, 17.39130435, 21.73913043])
+
+
+
+
+
+
+
+
